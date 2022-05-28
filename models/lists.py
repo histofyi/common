@@ -37,7 +37,7 @@ class itemSet(DataClass):
     }
 
 
-    def __init__(self, set_slug, context, title=None, set_type='structures'):
+    def __init__(self, set_slug, context, title=None, set_type='structures', aws_config=None):
         """
         This method initialises the itemSet class
 
@@ -53,7 +53,13 @@ class itemSet(DataClass):
         else:
             self.set_slug = slugify(title)
         self.set_key = awsKeyProvider().set_key(self.set_slug, set_type, context)
-        self.aws_config = current_app.config['AWS_CONFIG']
+        if not aws_config:
+            try:
+                self.aws_config = current_app.config['AWS_CONFIG']
+            except:
+                self.aws_config = None
+        else:
+            self.aws_config = aws_config
         super().__init__()
 
 

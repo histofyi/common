@@ -1,3 +1,4 @@
+from flask import current_app
 from typing import List, Union, Dict
 from math import ceil
 
@@ -60,10 +61,17 @@ class DataClass():
 
 
 class FacetClass():
-    def __init__(self, _name, _facet, _aws_config):
+    def __init__(self, _name, _facet, aws_config):
+        if not aws_config:
+            try:
+                self.aws_config = current_app.config['AWS_CONFIG']
+            except:
+                self.aws_config = None
+        else:
+            self.aws_config = aws_config
         self._name = _name
         self._facet = _facet
-        self._s3 = s3Provider(_aws_config)
+        self._s3 = s3Provider(aws_config)
 
 
     def get(self, facet, pdb_code):
