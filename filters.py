@@ -15,7 +15,7 @@ def class_i_display_name(allele):
         return 'Unmatched'
 
 
-def structure_title(structure):
+def structure_title(structure, short=False):
     title = None
     if 'complex' in structure:
         print ('has complex')
@@ -33,6 +33,18 @@ def structure_title(structure):
                 title = f'{allele} binding TAPBR at {structure["resolution"]}&#8491; resolution'
             if structure['complex']['slug'] == 'class_i_possibly_without_peptide':
                 title = f'{allele} with no distinct peptide at {structure["resolution"]}&#8491; resolution'
+            if structure['complex']['slug'] == 'class_i_with_peptide_and_ly49c':
+                title = f'{allele} with {structure["peptide"]["sequence"]} and Ly49c NK receptor at {structure["resolution"]}&#8491; resolution'
+            if structure['complex']['slug'] == 'class_i_with_peptide_and_kir':
+                title = f'{allele} with {structure["peptide"]["sequence"]} and KIR NK receptor at {structure["resolution"]}&#8491; resolution'
+            if structure['complex']['slug'] == 'class_i_with_peptide_and_lir2':
+                title = f'{allele} with {structure["peptide"]["sequence"]} and LIR-2 at {structure["resolution"]}&#8491; resolution'
+            if structure['complex']['slug'] == 'class_i_with_peptide_and_lir1':
+                title = f'{allele} with {structure["peptide"]["sequence"]} and LIR-1 at {structure["resolution"]}&#8491; resolution'
+            if structure['complex']['slug'] == 'class_i_with_peptide_and_us2':
+                title = f'{allele} with {structure["peptide"]["sequence"]} and human cytomegalovirus protein US2 at {structure["resolution"]}&#8491; resolution'
+            if structure['complex']['slug'] == 'class_i_with_peptide_and_e3':
+                title = f'{allele} with {structure["peptide"]["sequence"]} and human adenovirus protein E3 at {structure["resolution"]}&#8491; resolution'
             if structure['complex']['slug'] in ['class_i_with_peptide_and_alpha_beta_tcr', 'class_i_with_peptide_and_gamma_delta_tcr']:
                 print ('is tcr')
                 if 'alpha_beta' in structure['complex']['slug']:
@@ -47,8 +59,10 @@ def structure_title(structure):
             title = f'"{structure["publication"]["citation"]["title"]}"'
         else:
             title = 'Currently unassigned'
+    else:
+        if not short:
+            title = f'{title}<br /><small>Title : "{structure["publication"]["citation"]["title"]}"</small>'
     return title
-
 
 
 def resolution_display(resolution):
