@@ -12,6 +12,7 @@ class filesystemProvider():
 
     def build_filepath(self, filename, format):
         filepath = self.basedir +'/' + filename + '.' + format
+        print (filepath)
         return filepath
     
 
