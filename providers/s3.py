@@ -2,8 +2,45 @@
 import boto3
 from botocore.client import Config
 
+import os
+from .filesystem import filesystemProvider
+
 import json
 import logging
+
+
+
+
+class localClient():
+
+    def __init__(self, basedir):
+        self.basedir = basedir
+        self.fs = filesystemProvider(basedir)
+
+
+    def create_file_handle(self, bucket, key):
+        file_handle = f'{self.basedir}/{bucket}/{key}'
+        return file_handle
+
+
+    def get_object(self, Bucket='test', Key='test'):
+        file_handle = self.create_file_handle(Bucket, Key)
+        data, success, errors = self.fs.get(None, fullpath=file_handle)
+        if success:
+            try:
+                data = json.dumps(data)
+            except:
+                data = data
+        return data
+
+
+    def put_object(self, Body=None, Bucket=None, Key=None):
+        file_handle = self.create_file_handle(Bucket, Key)
+        path = file_handle.rsplit('/', 1)[0]
+        os.makedirs(path, exist_ok=True)
+        data, success, errors = self.fs.put(None, Body, fullpath=file_handle)
+        pass
+
 
 class s3Provider():
 
@@ -11,15 +48,17 @@ class s3Provider():
     bucket = None
 
     def __init__(self, aws_config):
-        
         if aws_config['local']:
-            self.client = boto3.client('s3',
-                endpoint_url=aws_config['s3_url'],
-                aws_access_key_id=aws_config['aws_access_key_id'],
-                aws_secret_access_key=aws_config['aws_access_secret'],
-                config=Config(signature_version='s3v4')
-            )
+            self.client = localClient(basedir='../warehouse.histo.fyi/data')
+            self.local = True
+            #self.client = boto3.client('s3',
+            #    endpoint_url=aws_config['s3_url'],
+            #    aws_access_key_id=aws_config['aws_access_key_id'],
+            #    aws_secret_access_key=aws_config['aws_access_secret'],
+            #    config=Config(signature_version='s3v4')
+            #)
         else:
+            self.local = False
             self.client = boto3.client('s3',
                 aws_access_key_id = aws_config['aws_access_key_id'],
                 aws_secret_access_key = aws_config['aws_access_secret']
@@ -29,7 +68,10 @@ class s3Provider():
 
     def get(self, key, data_format='json'):
         try:
-            data = self.client.get_object(Bucket=self.bucket, Key=key)['Body'].read()
+            if self.local:
+                data = self.client.get_object(Bucket=self.bucket, Key=key)
+            else:
+                data = self.client.get_object(Bucket=self.bucket, Key=key)['Body'].read()
             if len(data) > 0:
                 if data_format == 'json':
                     try:
@@ -46,25 +88,28 @@ class s3Provider():
 
 
     def put(self, key, contents, data_format='json'):
-        if len(contents) > 0:
-            if key:
-                if data_format == 'json':
-                    try:
-                        contents = json.dumps(contents)
-                    except:
-                        return None, False, ['not_json']
+        if contents:
+            if len(contents) > 0:
+                if key:
+                    if data_format == 'json':
+                        try:
+                            contents = json.dumps(contents)
+                        except:
+                            return None, False, ['not_json']
+                    else:
+                        contents = contents
+                    if contents:
+                        self.client.put_object(Body=contents, Bucket=self.bucket, Key=key)
+                        return contents, True, []
+                    else:
+                        return None, False, ['unable_to_persist_to_s3']
                 else:
-                    contents = contents
-                if contents:
-                    self.client.put_object(Body=contents, Bucket=self.bucket, Key=key)
-                    return contents, True, []
-                else:
-                    return None, False, ['unable_to_persist_to_s3']
+                    return None, False, ['no_key_provided']
             else:
-                return None, False, ['no_key_provided']
+                return None, False, ['no_content_provided']
         else:
             return None, False, ['no_content_provided']
-
+    
     
     def update(self, key, contents, data_format='json'):
         if len(contents) > 0:

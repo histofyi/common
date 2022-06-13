@@ -16,8 +16,12 @@ class filesystemProvider():
         return filepath
     
 
-    def get_file_handle(self, filename, format, mode):
-        return open(self.build_filepath(filename, format), mode)
+    def get_file_handle(self, filename, format, mode, fullpath=None):
+        if fullpath:
+            file = open(fullpath, mode)
+        else:
+            file = open(self.build_filepath(filename, format), mode)
+        return file
 
 
     def check_exists(self, filename, format='json'):
@@ -28,13 +32,13 @@ class filesystemProvider():
             return False
 
 
-    def get(self,filename,format='json'):
+    def get(self,filename, format='json', fullpath=None):
         errors = []
         success = False
         data = None
         _file = None
         try:
-            _file = self.get_file_handle(filename, format, 'r')
+            _file = self.get_file_handle(filename, format, 'r', fullpath=fullpath)
         except:
             errors.append('not_found')
         if _file:
@@ -50,15 +54,21 @@ class filesystemProvider():
         return data, success, errors
 
 
-    def put(self, filename , payload, format='json'):
+    def put(self, filename, payload, format='json', fullpath=None):
         errors = []
         success = False
         data = None
         _file = None
         try:
-            _file = self.get_file_handle(filename, format, 'w')
+            if fullpath:
+                _file = self.get_file_handle(None, format, 'w', fullpath=fullpath)
+            else:    
+                _file = self.get_file_handle(filename, format, 'w')
         except:
-            _file = self.get_file_handle(filename, format, 'x')
+            if fullpath:
+                _file = self.get_file_handle(None, format, 'w', fullpath=fullpath)
+            else:
+                _file = self.get_file_handle(filename, format, 'x')
         if _file: 
             success = True
             if payload:
