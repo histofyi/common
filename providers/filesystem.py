@@ -12,7 +12,6 @@ class filesystemProvider():
 
     def build_filepath(self, filename, format):
         filepath = self.basedir +'/' + filename + '.' + format
-        print (filepath)
         return filepath
     
 
@@ -32,7 +31,7 @@ class filesystemProvider():
             return False
 
 
-    def get(self,filename, format='json', fullpath=None):
+    def get(self, filename, format='json', fullpath=None):
         errors = []
         success = False
         data = None
@@ -51,6 +50,8 @@ class filesystemProvider():
             else:
                 data = _file.read()
                 success = True
+        else:
+            errors.append('no_file')
         return data, success, errors
 
 

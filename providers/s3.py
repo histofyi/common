@@ -25,7 +25,8 @@ class localClient():
 
     def get_object(self, Bucket='test', Key='test'):
         file_handle = self.create_file_handle(Bucket, Key)
-        data, success, errors = self.fs.get(None, fullpath=file_handle)
+        file_type = Key.rsplit('.', 1)[1]
+        data, success, errors = self.fs.get(None, format=file_type, fullpath=file_handle)
         if success:
             try:
                 data = json.dumps(data)
@@ -110,7 +111,7 @@ class s3Provider():
         else:
             return None, False, ['no_content_provided']
     
-    
+
     def update(self, key, contents, data_format='json'):
         if len(contents) > 0:
             if key:
