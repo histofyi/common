@@ -49,6 +49,7 @@ class filesystemProvider():
                     data = None
             else:
                 data = _file.read()
+                data = data.encode('utf-8')
                 success = True
         else:
             errors.append('no_file')
