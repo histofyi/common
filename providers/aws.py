@@ -77,6 +77,22 @@ class awsKeyProvider():
         return f'sequences/files/{privacy.lower()}/{mhc_class.lower()}/{locus.lower()}.json'
 
 
+    def metadata_key(self, pipeline:str, filename:str) -> str:
+        """
+        Function to return the S3 key for a  metadata file
+
+        Args:
+            pipeline (str): the name of the current pipeline e.g. 'sequences'
+            filename (str): the name of the file e.g. 'ipd_versions'
+            
+
+        Returns:
+            str : the S3 key for the object
+        """
+        return f'{pipeline}/files/public/{filename}.json'
+
+
+
     def set_key(self, set_slug:str, set_type:str, context:str, privacy:str='public') -> str:
         """
         Function to return the S3 key for a specific itemset file
