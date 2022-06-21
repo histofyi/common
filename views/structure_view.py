@@ -1,7 +1,6 @@
 from flask import current_app
 from common.providers import s3Provider, awsKeyProvider
 
-import doi
 
 from common.helpers import fetch_constants, fetch_core
 
@@ -18,8 +17,6 @@ def structure_view(pdb_code):
             block_key = awsKeyProvider().block_key(pdb_code, block, 'info')
             block_data, success, errors = s3.get(block_key)
             structure['facets'][block] = block_data
-        if structure['doi'] is not None:
-            structure['doi_url'] = doi.get_real_url_from_doi(structure['doi'])
         if structure['associated_structures'] is not None:
             for associated_structure in structure['associated_structures']:
                 thisstructure, success, errors = fetch_core(associated_structure, current_app.config['AWS_CONFIG'])
