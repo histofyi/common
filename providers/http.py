@@ -22,7 +22,12 @@ class httpProvider():
     def post(self, url, payload, format):
         r = requests.post(url, data = payload)
         if r.status_code == 200:
-            content = r.json()
+            if format == 'json':
+                content = r.json()
+            else:
+                content = r.text
             return content
         else:
+            print (r.status_code)
+            print (r.text)
             return None
