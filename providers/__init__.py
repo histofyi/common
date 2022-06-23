@@ -4,3 +4,4 @@ from .http import httpProvider
 from .aws import awsKeyProvider
 from .pdbe import PDBeProvider
 from .rcsb import rcsbProvider
+from .algolia import algoliaProvider
