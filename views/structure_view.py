@@ -6,7 +6,7 @@ from common.helpers import fetch_constants, fetch_core
 
 
 def structure_view(pdb_code):
-    blocks = ['chains', 'allele_match', 'aligned', 'peptide_matches', 'peptide_neighbours', 'peptide_structures', 'peptide_angles', 'cleft_angles', 'c_alpha_distances']
+    blocks = ['chains', 'allele_match', 'aligned', 'peptide_matches', 'peptide_neighbours', 'peptide_structures', 'pockets', 'peptide_angles', 'cleft_angles', 'c_alpha_distances']
     structure, success, errors = fetch_core(pdb_code, current_app.config['AWS_CONFIG'])
     associated_structures = {}
     if success:
@@ -22,4 +22,4 @@ def structure_view(pdb_code):
                 thisstructure, success, errors = fetch_core(associated_structure, current_app.config['AWS_CONFIG'])
                 if success and associated_structure != pdb_code:
                     associated_structures[associated_structure] = thisstructure
-    return {'structure':structure, 'pdb_code':pdb_code, 'chain_types':fetch_constants('chains'), 'associated_structures':associated_structures}
+    return {'structure':structure, 'pdb_code':pdb_code, 'features':fetch_constants('features'), 'chain_types':fetch_constants('chains'), 'associated_structures':associated_structures}
