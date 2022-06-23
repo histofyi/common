@@ -7,3 +7,4 @@ from .rcsb import rcsbProvider
 from .algolia import algoliaProvider
 from .stein import steinProvider
 from .plausible import plausibleProvider
+from .slack import slackProvider
