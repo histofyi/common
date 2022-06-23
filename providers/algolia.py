@@ -22,9 +22,9 @@ class algoliaProvider():
             return {}, False, ['read_only_key']
 
 
-    def search(self, index_name:str, search_terms:List) -> Tuple[Dict, bool, List]:
+    def search(self, index_name:str, search_terms:List, page_size:int = 25) -> Tuple[Dict, bool, List]:
         index = self.client.init_index(index_name)
-        search_results = index.search(search_terms)
+        search_results = index.search(search_terms, {'hitsPerPage': page_size})
         if 'hits' in search_results:
             return search_results, True, []
         else:
