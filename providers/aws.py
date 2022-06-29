@@ -62,6 +62,20 @@ class awsKeyProvider():
         return f'structures/files/{privacy.lower()}/{structure_contents.lower()}/{assembly_identifier}.cif'
 
 
+    def pdb_file_key(self, assembly_identifier, structure_contents:str, privacy:str='public') -> str:
+        """
+        Function to return the S3 key for a specific pdb assembly file
+
+        Args:
+            pdb_code (str): the pdb code of the structure e.g. '7ejn'
+            structure_contents (str): the part of the structure e.g. 'raw', 'aligned', 'peptide', 'solvent', 'abd'
+            privacy (str): whether the file is public or private (not yet used)
+
+        Returns:
+            str : the S3 key for the object
+        """
+        return f'structures/files/{privacy.lower()}/{structure_contents.lower()}/{assembly_identifier}.pfb'
+
     def sequence_key(self, mhc_class:str, locus:str, privacy:str='public') -> str:
         """
         Function to return the S3 key for a specific set of sequences (a locus)
