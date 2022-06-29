@@ -19,10 +19,7 @@ def structure_title(structure, short=False):
     title = None
     if structure:
         if 'complex' in structure:
-            print ('has complex')
             if 'slug' in structure['complex']:
-                print ('has slug')
-                print (structure['complex']['slug'])
                 if structure["allele"] is None:
                     if structure['organism'] is not None:
                         allele = structure['organism']['common_name'].capitalize() + ' MHC Class I'
