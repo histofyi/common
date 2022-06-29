@@ -22,6 +22,18 @@ class SelectChains(Select):
         else:          
             return 0
 
+class SelectResidues(Select):
+    """ Only accept the specified residues when saving. """
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+
+    def accept_residue(self, res):
+        if res.id[1] >= self.start and res.id[1] <= self.end:
+            return True
+        else:
+            return False
+
 
 class NonHetSelect(Select):
     def accept_residue(self, residue):
