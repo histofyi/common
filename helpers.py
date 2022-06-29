@@ -123,13 +123,15 @@ def cif_loader(cif_data, assembly_name):
     return structure
 
 
-
-
-def fetch_core(pdb_code, aws_config):
-    key = awsKeyProvider().block_key(pdb_code, 'core', 'info')
+def fetch_facet(pdb_code, facet, aws_config):
+    key = awsKeyProvider().block_key(pdb_code, facet, 'info')
     s3 = s3Provider(aws_config)
     data, success, errors = s3.get(key)
     return data, success, errors
+
+
+def fetch_core(pdb_code, aws_config):
+    return fetch_facet(pdb_code, 'core', aws_config)
 
 
 def update_block(pdb_code, facet, domain, update, aws_config, privacy='public'):

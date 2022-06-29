@@ -2,7 +2,7 @@ from flask import current_app
 from common.providers import s3Provider, awsKeyProvider
 
 
-from common.helpers import fetch_constants, fetch_core
+from common.helpers import fetch_constants, fetch_core, fetch_facet
 
 
 def structure_view(pdb_code):
@@ -12,10 +12,8 @@ def structure_view(pdb_code):
     if success:
         structure['pdb_code'] = pdb_code
         structure['facets'] = {}
-        s3 = s3Provider(current_app.config['AWS_CONFIG'])
         for block in blocks:
-            block_key = awsKeyProvider().block_key(pdb_code, block, 'info')
-            block_data, success, errors = s3.get(block_key)
+            block_data, success, errors = fetch_facet(pdb_code, block, current_app.config['AWS_CONFIG'])
             structure['facets'][block] = block_data
         if structure['associated_structures'] is not None:
             for associated_structure in structure['associated_structures']:
