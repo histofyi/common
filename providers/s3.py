@@ -38,8 +38,9 @@ class localClient():
     def put_object(self, Body=None, Bucket=None, Key=None):
         file_handle = self.create_file_handle(Bucket, Key)
         path = file_handle.rsplit('/', 1)[0]
+        file_type = Key.rsplit('.', 1)[1]
         os.makedirs(path, exist_ok=True)
-        data, success, errors = self.fs.put(None, Body, fullpath=file_handle)
+        data, success, errors = self.fs.put(None, Body, fullpath=file_handle, format=file_type)
         pass
 
 
