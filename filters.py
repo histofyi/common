@@ -15,8 +15,10 @@ def class_i_display_name(allele):
         return 'Unmatched'
 
 
-def structure_title(structure, short=False):
+def structure_title(structure, url, short=False):
     title = None
+    if url == 'none':
+        url = None
     if structure:
         if 'complex' in structure:
             if 'slug' in structure['complex']:
@@ -59,7 +61,13 @@ def structure_title(structure, short=False):
                 title = 'Currently unassigned'
         else:
             if not short:
-                title = f'{title}<br /><small>Title : "{structure["publication"]["citation"]["title"]}"</small>'
+                if url:
+                    title = f'<a href="{url}">{title}</a><br /><small>Title : "{structure["publication"]["citation"]["title"]}"</small>'
+                else:
+                    title = f'{title}<br /><small>Title : "{structure["publication"]["citation"]["title"]}"</small>'
+            else:
+                if url:
+                    title = f'<a href="{url}">{title}</a>'
     else:
         title = 'Unknown'
     return title
