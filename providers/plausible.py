@@ -16,6 +16,7 @@ class plausibleProvider():
         headers = {'Content-type': 'application/json'}
         payload = {'name': event_name, 'domain': 'histo.fyi','url':site_url,'props':props}
         r = requests.post(self.url, data=json.dumps(payload), headers=headers)
+        print (r.content)
         if r.status_code == 200:
             return {'return':r.content}, True, []
         else:
@@ -26,6 +27,16 @@ class plausibleProvider():
     def empty_search(self, query:str) -> Tuple[Dict, bool, List]:
         search_url = f'https://www.histo.fyi/search?query={query}'
         return self.handle_event('EmptySearch', search_url, {'query':query})
+
+
+    def data_download(self, file:str, data_type:str, pdb_code:str) -> Tuple[Dict, bool, List]:
+        data_url = f'https://www.histo.fyi/structures/downloads/{file}'
+        return self.handle_event('DataDownload', data_url, {'file':file, 'pdb_code':pdb_code, 'data_type':data_type})
+
+
+    def structure_download(self, structure:str, structure_type:str, pdb_code:str) -> Tuple[Dict, bool, List]:
+        structure_url = f'https://www.histo.fyi/structures/downloads/{structure}'
+        return self.handle_event('StructureDownload', structure_url, {'structure':structure, 'pdb_code':pdb_code, 'structure_type':structure_type})
 
 
     def record_404(self, path:str) -> Tuple[Dict, bool, List]:
