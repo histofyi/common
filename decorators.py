@@ -69,6 +69,7 @@ def templated(template:str):
             elif not isinstance(ctx, dict):
                 ctx = {'content': ctx}
             ctx['site_title'] = current_app.config['SITE_TITLE']
+            ctx['static_route'] = current_app.config['STATIC_ROUTE']
             if 'userobj' in ctx:
                 ctx['userobj'] = kwargs['userobj']
             else:
