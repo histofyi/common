@@ -7,7 +7,7 @@ from common.helpers import fetch_constants, fetch_core, fetch_facet
 
 def structure_view(pdb_code):
     blocks = ['chains', 'allele_match', 'aligned', 'peptide_matches', 'peptide_neighbours', 'peptide_structures', 'pockets', 'peptide_angles', 'cleft_angles', 'c_alpha_distances']
-    message = 'This structure is of a non-classical Class I molecule or a homologue. These structures will be available in a future release.'
+    message = 'This structure is of a non-classical Class I molecule or a homologue, or a classical Class I molecule with some issues in the underlying data. These structures will be available in a future release.'
     display = False
     structure, success, errors = fetch_core(pdb_code, current_app.config['AWS_CONFIG'])
     if 'complex' in structure:
