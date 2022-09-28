@@ -3,6 +3,7 @@ from .s3 import s3Provider
 from .http import httpProvider
 from .aws import awsKeyProvider
 from .pdbe import PDBeProvider
+from .pmce import PMCeProvider
 from .rcsb import rcsbProvider
 from .algolia import algoliaProvider
 from .stein import steinProvider

@@ -18,7 +18,10 @@ class PDBeProvider():
 
     def fetch(self, route, first_only=True):
         url = f'{self.url_stem}/{route}/{self.pdb_code}'
-        results = httpProvider().get(url, format='json')[self.pdb_code]
+        try:
+            results = httpProvider().get(url, format='json')[self.pdb_code]
+        except:
+            results = None
         if results:
             trimmed_results = results
             if isinstance(results, list):

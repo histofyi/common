@@ -16,6 +16,7 @@ class rcsbProvider():
         self.pdb_code = pdb_code
         self.url_stem = 'https://data.rcsb.org/rest/v1/core'
 
+
     def fetch(self, route, identifier):
         url = f'{self.url_stem}/{route}/{self.pdb_code}/{identifier}'
         results = httpProvider().get(url, format='json')
@@ -24,6 +25,7 @@ class rcsbProvider():
             return trimmed_results, True, []
         else:
             return {}, False, ['unable_to_fetch']
+
 
     def fetch_uniprot(self, identifier):
         return self.fetch('uniprot', identifier)
