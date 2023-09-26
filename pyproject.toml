@@ -1,0 +1,12 @@
+[project]
+name = "common"
+version = "0.1"
+description = "A python library of common functions for microservices and pipelines."
+readme = "README.md"
+authors = [{name = "Chris Thorpe"}]
+license = {text = "Apache-2.0"}
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha"
+]
+# ...
+dependencies = []

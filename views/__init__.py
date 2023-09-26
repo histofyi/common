@@ -1,2 +1,0 @@
-from .structure_lookup import structure_lookup
-from .structure_view import structure_view
